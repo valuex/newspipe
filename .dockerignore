@@ -74,9 +74,3 @@ instance/*.py
 # Misc
 .pre-commit-config.yaml
 .editorconfig
-README.md
-AUTHORS.md
-CHANGELOG.md
-COPYING
-SECURITY.md
-*.md
