@@ -71,6 +71,10 @@ instance/*.py
 !instance/config.py
 !instance/sqlite.py
 
+# Environment files (may contain secrets)
+.env
+.env.local
+
 # Misc
 .pre-commit-config.yaml
 .editorconfig

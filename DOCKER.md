@@ -19,7 +19,18 @@ The easiest way to run Newspipe with Docker is using Docker Compose, which will 
    cd newspipe
    ```
 
-2. **Configure the application**:
+2. **Configure environment variables**:
+   
+   Create a `.env` file from the example:
+   
+   ```bash
+   cp .env.example .env
+   vim .env  # Edit and set strong passwords
+   ```
+   
+   **Important**: Set a strong `POSTGRES_PASSWORD` in the `.env` file!
+
+3. **Configure the application**:
    
    The `instance/config.py` file contains the default PostgreSQL configuration that works with the docker-compose setup. You may want to customize it:
    
@@ -30,23 +41,23 @@ The easiest way to run Newspipe with Docker is using Docker Compose, which will 
    
    **Important**: Change the `SECRET_KEY` and `SECURITY_PASSWORD_SALT` values in production!
 
-3. **Build and start the containers**:
+4. **Build and start the containers**:
    ```bash
    docker-compose up -d
    ```
 
-4. **Initialize the database** (first time only):
+5. **Initialize the database** (first time only):
    ```bash
    docker-compose exec web flask db_create
    docker-compose exec web flask db_init
    ```
 
-5. **Create an admin user** (first time only):
+6. **Create an admin user** (first time only):
    ```bash
    docker-compose exec web flask create_admin --nickname admin --password YourSecurePassword
    ```
 
-6. **Access Newspipe**:
+7. **Access Newspipe**:
    
    Open your browser and navigate to `http://localhost:5000`
 
