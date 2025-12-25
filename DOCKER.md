@@ -160,7 +160,7 @@ docker exec -it newspipe flask create_admin --nickname admin --password YourPass
 docker run -d \
   --name newspipe-db \
   -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_PASSWORD=changeme \
   -e POSTGRES_DB=postgres \
   -v newspipe-postgres:/var/lib/postgresql/data \
   postgres:17-alpine
