@@ -25,21 +25,27 @@ The easiest way to run Newspipe with Docker is using Docker Compose, which will 
    
    ```bash
    cp .env.example .env
-   vim .env  # Edit and set strong passwords
+   vim .env  # Edit and set strong passwords and secrets
    ```
    
-   **Important**: Set a strong `POSTGRES_PASSWORD` in the `.env` file!
-
-3. **Configure the application**:
+   **Important**: Set strong values for:
+   - `POSTGRES_PASSWORD` - Database password
+   - `SECRET_KEY` - Flask application secret key
+   - `SECURITY_PASSWORD_SALT` - Password hashing salt
    
-   The `instance/config.py` file contains the default PostgreSQL configuration that works with the docker-compose setup. You may want to customize it:
-   
+   You can generate secure random values with:
    ```bash
-   cp instance/config.py instance/config.py.example
+   python -c "import secrets; print(secrets.token_urlsafe(32))"
+   ```
+
+3. **Configure the application** (optional):
+   
+   The `instance/config.py` file works out of the box with docker-compose and reads from environment variables. 
+   
+   You can customize additional settings if needed:
+   ```bash
    vim instance/config.py  # Edit as needed
    ```
-   
-   **Important**: Change the `SECRET_KEY` and `SECURITY_PASSWORD_SALT` values in production!
 
 4. **Build and start the containers**:
    ```bash

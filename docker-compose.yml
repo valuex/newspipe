@@ -29,6 +29,8 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
       - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - SECRET_KEY=${SECRET_KEY:-}
+      - SECURITY_PASSWORD_SALT=${SECURITY_PASSWORD_SALT:-}
     volumes:
       - ./instance:/app/instance
       - ./var:/app/var

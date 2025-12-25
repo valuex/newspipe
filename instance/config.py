@@ -14,8 +14,10 @@ API_ROOT = "/api/v2.0"
 # PREFIX = "/newspipe"
 
 CSRF_ENABLED = True
-SECRET_KEY = "LCx3BchmHRxFzkEv4BqQJyeXRLXenf"
-SECURITY_PASSWORD_SALT = "L8gTsyrpRQEF8jNWQPyvRfv7U5kJkD"
+SECRET_KEY = os.environ.get("SECRET_KEY", "LCx3BchmHRxFzkEv4BqQJyeXRLXenf")
+SECURITY_PASSWORD_SALT = os.environ.get(
+    "SECURITY_PASSWORD_SALT", "L8gTsyrpRQEF8jNWQPyvRfv7U5kJkD"
+)
 
 # Database
 DB_CONFIG_DICT = {
