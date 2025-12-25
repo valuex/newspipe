@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Newspipe web application
+  web:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${PORT:-5000}:5000"
+    environment:
+      - FLASK_APP=app.py
+      - NEWSPIPE_CONFIG=config.py
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - SECRET_KEY=${SECRET_KEY:-}
+      - SECURITY_PASSWORD_SALT=${SECURITY_PASSWORD_SALT:-}
+    volumes:
+      - ./instance:/app/instance
+      - ./var:/app/var
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "
+        flask db upgrade &&
+        flask run --host=0.0.0.0
+      "
+
+volumes:
+  postgres_data:

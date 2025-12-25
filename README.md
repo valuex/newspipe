@@ -28,6 +28,23 @@ Newspipe is written in Python. The core technologies are
 ## Deployment
 
 Newspipe is really easy to deploy.
+
+### Docker Deployment (Recommended)
+
+The easiest way to deploy Newspipe is using Docker. See [DOCKER.md](DOCKER.md) for complete instructions.
+
+Quick start:
+```bash
+$ git clone https://github.com/cedricbonhomme/newspipe
+$ cd newspipe/
+$ docker-compose up -d
+$ docker-compose exec web flask db_create
+$ docker-compose exec web flask db_init
+$ docker-compose exec web flask create_admin --nickname admin --password <password>
+```
+
+### Manual Deployment
+
 Assuming you have already installed ``git``, ``poetry``, ``npm``,  and
 ``Python >= 3.10``, you just have to do the following:
 

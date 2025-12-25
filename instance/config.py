@@ -14,17 +14,19 @@ API_ROOT = "/api/v2.0"
 # PREFIX = "/newspipe"
 
 CSRF_ENABLED = True
-SECRET_KEY = "LCx3BchmHRxFzkEv4BqQJyeXRLXenf"
-SECURITY_PASSWORD_SALT = "L8gTsyrpRQEF8jNWQPyvRfv7U5kJkD"
+SECRET_KEY = os.environ.get("SECRET_KEY", "LCx3BchmHRxFzkEv4BqQJyeXRLXenf")
+SECURITY_PASSWORD_SALT = os.environ.get(
+    "SECURITY_PASSWORD_SALT", "L8gTsyrpRQEF8jNWQPyvRfv7U5kJkD"
+)
 
 # Database
 DB_CONFIG_DICT = {
-    "user": "postgres",
-    "password": "password",
+    "user": os.environ.get("POSTGRES_USER", "postgres"),
+    "password": os.environ.get("POSTGRES_PASSWORD", "changeme"),
     "host": "db",
     "port": 5432,
 }
-DATABASE_NAME = "postgres"
+DATABASE_NAME = os.environ.get("POSTGRES_DB", "postgres")
 SQLALCHEMY_DATABASE_URI = "postgresql://{user}:{password}@{host}:{port}/{name}".format(
     name=DATABASE_NAME, **DB_CONFIG_DICT
 )
