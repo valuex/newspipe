@@ -34,14 +34,22 @@ function change_unread_counter(feed_id, increment) {
 
 
 // Mark an article as read when it is opened in a new tab
-document.getElementsByClassName('open-article').onclick = function fun() {
-  var feed_id = $(this).parentNode.parentNode.attr("data-bs-feed");
-  var filter = $('#filters').attr("data-filter");
-  if (filter == "unread") {
-    $(this).parentNode.parentNode.remove();
-    change_unread_counter(feed_id, -1);
-  }
-};
+document.querySelectorAll(".open-article").forEach(el => {
+  el.addEventListener("click", function() {
+    const feedContainer = this.closest("[data-bs-feed]");
+    if (!feedContainer) return;
+
+    const feed_id = feedContainer.dataset.bsFeed;
+    if (!/^[0-9a-fA-F-]+$/.test(feed_id)) return;
+    const filterEl = document.getElementById("filters");
+    const filter = filterEl ? filterEl.dataset.filter : null;
+
+    if (filter === "unread") {
+      feedContainer.remove();
+      change_unread_counter(feed_id, -1);
+    }
+  });
+});
 
 
 // Mark an article as read or unread from the home page
@@ -137,7 +145,9 @@ Array.prototype.map.call(nodes, function(node) {
 var nodes = document.getElementsByClassName('like');
 Array.prototype.map.call(nodes, function(node) {
     node.onclick = function() {
-      var article_id = node.parentNode.parentNode.parentNode.getAttribute('data-article');
+      const container = document.querySelector(".article");
+      const article_id = container.getAttribute("data-article");
+      console.log(article_id);
       var data;
       if (node.classList.contains("bi-star-fill")) {
           data = JSON.stringify({like: false});
@@ -172,16 +182,25 @@ Array.prototype.map.call(nodes, function(node) {
 
     // Delete all duplicate articles (used in the page /duplicates)
     var nodes = document.getElementsByClassName('delete-all');
-    Array.prototype.map.call(nodes, function(node) {
-        node.onclick = function() {
+    Array.prototype.forEach.call(nodes, function(node) {
+      node.onclick = function() {
         var data = [];
 
-        var columnNo = node.parentNode.index();
-        node.closest("table")
-            .find("tr td:nth-child(" + (columnNo+1) + ")")
-            .each(function(line, column) {
-                data.push(parseInt(column.id));
-            }).remove();
+        // get the column index of the header cell
+        var th = node.closest("th");
+        var columnNo = Array.prototype.indexOf.call(th.parentNode.children, th);
+
+        // select all rows of the table body
+        var table = node.closest("table");
+        var rows = table.querySelectorAll("tbody tr");
+
+        rows.forEach(function(row) {
+          var cell = row.children[columnNo];
+          if (cell && cell.id) {
+            data.push(parseInt(cell.id));
+            row.removeChild(cell); // remove just the cell
+          }
+        });
 
         data = JSON.stringify(data);
 
@@ -196,6 +215,6 @@ Array.prototype.map.call(nodes, function(node) {
           console.log("Request complete! response:", res);
         }).catch((error) => {
           console.error('Error:', error);
-        });;
+        });
       }
-  });
+    });

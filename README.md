@@ -35,7 +35,7 @@ Assuming you have already installed ``git``, ``poetry``, ``npm``,  and
 $ git clone https://github.com/cedricbonhomme/newspipe
 $ cd newspipe/
 $ npm ci
-$ poetry install --no-dev
+$ poetry install
 $ poetry shell
 $ pybabel compile -d newspipe/translations
 $ export NEWSPIPE_CONFIG=sqlite.py
@@ -60,6 +60,30 @@ $ flask db_init
 
 For production you can use [Gunicorn](https://gunicorn.org) or ``mod_wsgi``.
 
+### Updates and migrations
+
+```bash
+$ cd newspipe/
+$ git pull origin master
+$ poetry install
+$ poetry run flask db upgrade
+$ poetry run pybabel compile -d newspipe/translations
+```
+
+## Retrieving feeds automatically
+
+A dedicated Flask command is available to run the RSS/Atom feed importer.
+You can schedule it using a cron job, for example:
+
+```bash
+0 */3 * * * poetry run flask fetch_asyncio
+```
+
+When using cron it is usally best to be more precise with the command location, for example:
+
+```bash
+0 */3 * * * FLASK_APP=app.py /home/cedric/.cache/pypoetry/virtualenvs/newspipe-19mdZ4UL-py3.12/bin/flask fetch_asyncio
+```
 
 ## License
 
